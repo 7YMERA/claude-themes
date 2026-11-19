@@ -11,9 +11,12 @@ My Claude themes, all in one place. Each theme is its own plugin in `themes/`, a
 | **alif-kl-day** | Pixel-art Kuala Lumpur by day: a bright blue sky, pixel clouds and sun, a dense skyline (Menara KL, Petronas Twin Towers with their skybridge, Merdeka Maybank, The Exchange 106) and a grass strip along the bottom. Light mode only. |
 | **alif-kl-night** | The same skyline at night: stars, a crescent moon and twinkling lit windows. Dark mode only. |
 | **alif-pixel-meadow** | A soft meadow packed with a bajillion goofy pixel critters: a five-high critter tower wobbling while the top one flies a kite with a face, a mint derp in a party hat (asleep at night), cheering crowds on both hills, critters riding the clouds and three balloons, one sitting on the sun (fishing off the moon at night), a gopher, a baby riding on the main critter’s head, one peeking over the laptop, and the original typing away. Peach morning by day, plum starry night by dark. Light and dark. |
+| **alif-kl-meadow** | The same critter crowd with the Kuala Lumpur skyline behind the meadow, drawn in smooth vector with true relative heights and in their real north-to-south order as seen from the west: Four Seasons Place and the Petronas Twin Towers (setbacks, pinnacles and skybridge), Menara KL on Bukit Nanas, The Exchange 106 and the Merdeka Maybank Tower with its faceted body and spire. Hazy pastel city by day; by night the Twin Towers glow silver, windows twinkle, crowns are lit and the spires blink. Light and dark. |
 
 ![alif-pixel-meadow by day](previews/pixel-meadow-day.png)
 ![alif-pixel-meadow by night](previews/pixel-meadow-night.png)
+![alif-kl-meadow by day](previews/kl-meadow-day.png)
+![alif-kl-meadow by night](previews/kl-meadow-night.png)
 
 Themes draw in the Claude desktop and mobile apps. The terminal and editors draw no themes.
 
@@ -27,6 +30,7 @@ At the prompt of a terminal session:
 /plugin install alif-kl-day --marketplace 7YMERA/claude-themes
 /plugin install alif-kl-night --marketplace 7YMERA/claude-themes
 /plugin install alif-pixel-meadow --marketplace 7YMERA/claude-themes
+/plugin install alif-kl-meadow --marketplace 7YMERA/claude-themes
 ```
 
 Answer `y` to add the marketplace, then pick a scope. From a shell:

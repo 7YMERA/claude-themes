@@ -28,6 +28,11 @@
       "name": "alif-pixel-meadow",
       "source": "./themes/alif-pixel-meadow",
       "description": "A soft pixel meadow with a little orange critter at its laptop: a peach morning with drifting clouds by day, a plum starry night with fireflies by dark."
+    },
+    {
+      "name": "alif-kl-meadow",
+      "source": "./themes/alif-kl-meadow",
+      "description": "The Kuala Lumpur skyline in smooth vector behind the critter meadow: Petronas Twin Towers, Menara KL, The Exchange 106 and Merdeka Maybank Tower, hazy pastel by day and lit up under a plum starry sky by night."
     }
   ]
 }
