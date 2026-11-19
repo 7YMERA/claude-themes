@@ -3,7 +3,7 @@ import type { Register, ThemeSetArgs } from 'claude-code'
 import { makeColors } from './make-colors.js'
 import { buildScene } from './scene.js'
 
-// The Kuala Lumpur skyline behind the critter meadow. Peach morning paper and terracotta ink by day,
+// The Kuala Lumpur skyline behind the critter meadow, held at morning (light) whatever mode the app is in. Peach morning paper and terracotta ink by day,
 // plum night with warm lamp-lit text by dark. One plugin serves both modes: the scene swaps palettes by itself.
 const { theme, problems } = makeColors({
   label: 'alif-kl-meadow',
@@ -39,7 +39,7 @@ const { theme, problems } = makeColors({
 const SCENE = buildScene()
 
 // glass with no tint takes each mode's own panel colour, so one veil works by day and by night
-const LOOK: ThemeSetArgs = { colors: theme, backdrop: { scene: 'kl-meadow', glass: { blur: 10, opacity: 0.55 } } }
+const LOOK: ThemeSetArgs = { colors: theme, overrideColorScheme: 'light', backdrop: { scene: 'kl-meadow', glass: { blur: 10, opacity: 0.55 } } }
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {

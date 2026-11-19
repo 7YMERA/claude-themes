@@ -191,10 +191,10 @@ ${rules(DAY)}
 .fly1{animation-delay:3s;animation-duration:11s}
 .fly2{animation-delay:6s;animation-duration:13s}
 .sway{transform-box:fill-box;transform-origin:bottom center;animation:sway 6s ease-in-out infinite}
-.hop{animation:hop 2.4s ease-in-out infinite}
-.squish{transform-box:fill-box;transform-origin:bottom center;animation:squish 2.4s ease-in-out infinite}
+.hop{animation:hop 3.6s ease-in-out infinite}
+.squish{transform-box:fill-box;transform-origin:bottom center;animation:squish 3.6s ease-in-out infinite}
 .wobble{transform-box:fill-box;transform-origin:bottom center;animation:wobble 3.2s ease-in-out infinite}
-.peek{animation:peek 9s ease-in-out infinite}
+.peek{animation:peek 16s ease-in-out infinite}
 .zz{animation:zz 4.5s linear infinite;opacity:0}
 .zz1{animation-delay:1.5s}
 .zz2{animation-delay:3s}
@@ -202,25 +202,26 @@ ${rules(DAY)}
 .flutter{animation:flutter 7s ease-in-out infinite}
 .float{animation:float 8s ease-in-out infinite}
 .dangle{transform-box:fill-box;transform-origin:top center;animation:sway 5s ease-in-out infinite}
-.kick{animation:kick 1.2s ease-in-out infinite}
+.kick{animation:kick 3s ease-in-out infinite}
+.ride{animation:bob 5s ease-in-out infinite}
 .cheer{animation:cheer 1.6s ease-in-out infinite}
 .blinkB{animation:tw 2.4s steps(2) infinite}
 .winTw{animation:tw 7s ease-in-out infinite}
 .winTw2{animation-delay:-3.5s}
-.peek2{animation:peek2 5s ease-in-out infinite}
-@keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.peek2{animation:peek2 9s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
 @keyframes cheer{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-12px)}}
 @keyframes peek2{0%,40%,100%{transform:translateY(6px)}55%,85%{transform:translateY(0)}}
 @keyframes bobber{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-@keyframes hop{0%,30%,100%{transform:translateY(0)}55%{transform:translateY(-26px)}}
-@keyframes squish{0%,100%{transform:scale(1,1)}20%{transform:scale(1.12,.85)}35%{transform:scale(.92,1.1)}70%{transform:scale(1,1)}78%{transform:scale(1.1,.88)}}
+@keyframes hop{0%,30%,100%{transform:translateY(0)}55%{transform:translateY(-6px)}}
+@keyframes squish{0%,100%{transform:scale(1,1)}20%{transform:scale(1.03,.97)}35%{transform:scale(.98,1.02)}70%{transform:scale(1,1)}78%{transform:scale(1.03,.97)}}
 @keyframes wobble{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
 @keyframes peek{0%,50%,100%{transform:translateY(0)}58%,84%{transform:translateY(-52px)}62%,70%{transform:translate(4px,-52px)}}
 @keyframes zz{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(26px,-60px);opacity:0}}
 @keyframes flap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
 @keyframes flutter{0%,100%{transform:translate(0,0)}25%{transform:translate(40px,-30px)}50%{transform:translate(80px,0)}75%{transform:translate(30px,20px)}}
 @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,-18px)}}
-@keyframes kick{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes kick{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-1600px)}}
 @keyframes tw{0%,100%{opacity:.9}50%{opacity:.25}}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -232,7 +233,7 @@ ${rules(DAY)}
 }
 
 function cloud(x, y, s, rider) {
-  const r = rider ? `<g class="cheer" style="animation-delay:${((x % 7) / 5).toFixed(2)}s">${sprite(rider.pose, 50, -12 - rider.pose.length * 3, 3, COATS[rider.coat])}</g>` : ''
+  const r = rider ? `<g class="ride" style="animation-delay:${((x % 7) / 5).toFixed(2)}s">${sprite(rider.pose, 50, -12 - rider.pose.length * 3, 3, COATS[rider.coat])}</g>` : ''
   return `<g transform="translate(${x} ${y}) scale(${s})">${r}<path class="cloud" d="M0 40a30 30 0 0 1 30-30a42 42 0 0 1 78-6a32 32 0 0 1 52 22a22 22 0 0 1 4 44H8a20 20 0 0 1-8-30z"/></g>`
 }
 
@@ -266,7 +267,7 @@ function tower(x, feet, levels) {
   for (let i = parts.length - 1; i >= 0; i--) {
     const p = parts[i], body = sprite(p.pose, x, p.top, 6, COATS[p.coat])
     inner = i === 0 ? body + inner
-      : `<g style="transform-origin:${x + 42}px ${p.feet}px;animation:wob ${(2.6 + i * 0.35).toFixed(2)}s ease-in-out infinite;animation-delay:${(-i * 0.6).toFixed(1)}s">${body}${inner}</g>`
+      : `<g style="transform-origin:${x + 42}px ${p.feet}px;animation:wob ${(5 + i * 0.6).toFixed(2)}s ease-in-out infinite;animation-delay:${(-i * 0.6).toFixed(1)}s">${body}${inner}</g>`
   }
   return inner
 }
