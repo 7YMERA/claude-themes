@@ -1,0 +1,33 @@
+{
+  "name": "claude-themes",
+  "owner": {
+    "name": "Alif Najmi"
+  },
+  "plugins": [
+    {
+      "name": "alif-skyline",
+      "source": "./themes/alif-skyline",
+      "description": "Alif's portfolio as a Claude theme: cobalt on pale paper by day, night-city navy by night, with a faint Kuala Lumpur skyline and ringed moon behind the chat."
+    },
+    {
+      "name": "alif-beach",
+      "source": "./themes/alif-beach",
+      "description": "A beach for Claude: sand and sea-glass by day, a moonlit shoreline by night, with a faint sun, drifting waves, a boat and a palm behind the chat."
+    },
+    {
+      "name": "alif-kl-day",
+      "source": "./themes/alif-kl-day",
+      "description": "A pixel-art Kuala Lumpur by day: a bright blue sky, pixel clouds and sun, a dense skyline and a grass strip."
+    },
+    {
+      "name": "alif-kl-night",
+      "source": "./themes/alif-kl-night",
+      "description": "A pixel-art Kuala Lumpur by night: stars, a crescent moon and the same dense skyline with its windows lit."
+    },
+    {
+      "name": "alif-pixel-meadow",
+      "source": "./themes/alif-pixel-meadow",
+      "description": "A soft pixel meadow with a little orange critter at its laptop: a peach morning with drifting clouds by day, a plum starry night with fireflies by dark."
+    }
+  ]
+}
