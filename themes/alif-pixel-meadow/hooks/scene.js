@@ -170,7 +170,7 @@ ${rules(DAY)}
 .zz2{animation-delay:3s}
 .flap{transform-box:fill-box;transform-origin:center;animation:flap .5s ease-in-out infinite}
 .flutter{animation:flutter 7s ease-in-out infinite}
-.balloon{animation:balloon 170s linear infinite}
+.float{animation:float 8s ease-in-out infinite}
 .dangle{transform-box:fill-box;transform-origin:top center;animation:sway 5s ease-in-out infinite}
 .kick{animation:kick 1.2s ease-in-out infinite}
 @keyframes hop{0%,30%,100%{transform:translateY(0)}55%{transform:translateY(-26px)}}
@@ -180,7 +180,7 @@ ${rules(DAY)}
 @keyframes zz{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(26px,-60px);opacity:0}}
 @keyframes flap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
 @keyframes flutter{0%,100%{transform:translate(0,0)}25%{transform:translate(40px,-30px)}50%{transform:translate(80px,0)}75%{transform:translate(30px,20px)}}
-@keyframes balloon{from{transform:translateX(0)}to{transform:translateX(-2100px)}}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,-18px)}}
 @keyframes kick{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-1600px)}}
 @keyframes tw{0%,100%{opacity:.9}50%{opacity:.25}}
@@ -215,26 +215,26 @@ export function buildScene() {
   const cx = 880, cy = 488 // critter's top-left
   const tufts = [[770, 556], [792, 552], [975, 548], [990, 556], [745, 562]]
     .map(([x, y], i) => `<path class="tuft sway" style="animation-delay:${i * 0.9}s" d="M${x} ${y}l3-12l2 12l4-9l1 9z"/>`).join('')
-  const leftTufts = [[20, 548], [150, 536], [176, 540], [330, 568], [380, 590]]
+  const leftTufts = [[180, 540], [292, 538], [306, 542], [430, 566], [480, 588]]
     .map(([x, y], i) => `<path class="tuft sway" style="animation-delay:${i * 0.7}s" d="M${x} ${y}l3-12l2 12l4-9l1 9z"/>`).join('')
-  const zeds = [0, 1, 2].map(i => `<g class="zz zz${i}">${sprite(ZED, 292, 470, 4)}</g>`).join('')
+  const zeds = [0, 1, 2].map(i => `<g class="zz zz${i}">${sprite(ZED, 384, 470, 4)}</g>`).join('')
   // the friends' corner: pinned to the bottom-left, clear of the words in the middle
   const left = `
 <svg x="0" y="0" width="100%" height="100%" viewBox="0 0 1000 625" preserveAspectRatio="xMinYMax meet" overflow="visible">
-  <path class="front" d="M-60 625V548C80 528 260 532 440 625z"/>
+  <path class="front" d="M-60 625V548C150 530 380 535 560 625z"/>
   ${leftTufts}
-  <g>${sprite(PLAIN, 40, 484, 6, COATS.peach)}</g>
-  <g class="wobble"><g class="kick">${sprite(SHADES, 40, 430, 6, COATS.lilac)}</g></g>
+  <g>${sprite(PLAIN, 196, 486, 6, COATS.peach)}</g>
+  <g class="wobble"><g class="kick">${sprite(SHADES, 196, 432, 6, COATS.lilac)}</g></g>
   <g class="day"><g class="hop"><g class="squish">
-    ${sprite(DERP, 200, 494, 6, COATS.mint)}
-    <g transform="rotate(-18 236 488)">${sprite(HAT, 200, 458, 6)}</g>
+    ${sprite(DERP, 312, 498, 6, COATS.mint)}
+    <g transform="rotate(-18 348 492)">${sprite(HAT, 312, 462, 6)}</g>
   </g></g></g>
   <g class="night">
-    ${sprite(SLEEPY, 200, 494, 6, COATS.mint)}
-    <g transform="rotate(-18 236 488)">${sprite(HAT, 200, 458, 6)}</g>
+    ${sprite(SLEEPY, 312, 498, 6, COATS.mint)}
+    <g transform="rotate(-18 348 492)">${sprite(HAT, 312, 462, 6)}</g>
     ${zeds}
   </g>
-  <g class="day"><g class="flutter"><g transform="translate(320 440)">
+  <g class="day"><g class="flutter"><g transform="translate(296 408)">
     <g class="flap"><path fill="#f6a5c0" d="M0 0c-14-12-22 4-10 10c-12 6-4 18 10 6z"/><path fill="#f6a5c0" d="M0 0c14-12 22 4 10 10c12 6 4 18-10 6z"/><rect x="-1" y="-4" width="2" height="16" fill="#4b4352"/></g>
   </g></g></g>
 </svg>`
@@ -242,7 +242,12 @@ export function buildScene() {
   const corner = `
 <svg x="0" y="0" width="100%" height="100%" viewBox="0 0 1000 625" preserveAspectRatio="xMaxYMax meet" overflow="visible">
   <defs><radialGradient id="lamp"><stop class="glow" offset="0" stop-opacity=".35"/><stop class="glow" offset="1" stop-opacity="0"/></radialGradient></defs>
-  <g class="peek">${sprite(PEEKER, 712, 578, 4, COATS.orange)}</g>
+  <g class="float"><g transform="translate(806 236)"><g class="dangle">
+    <ellipse cx="0" cy="0" rx="26" ry="32" fill="#e8657a"/><ellipse cx="-9" cy="-11" rx="6" ry="9" fill="#f5a3b0"/>
+    <path d="M-4 31h8l-4 6z" fill="#c94f63"/><path d="M0 37v46" stroke="#4b4352" stroke-width="1.5" fill="none"/>
+    ${sprite(PLAIN, -21, 83, 3, COATS.orange)}
+  </g></g></g>
+  <g class="peek">${sprite(PEEKER, 728, 578, 4, COATS.orange)}</g>
   <path class="front" d="M560 625C620 575 730 545 860 543S990 548 1040 556V625z"/>
   ${tufts}
   <g transform="translate(796 502)">
@@ -279,11 +284,6 @@ export function buildScene() {
   <circle class="sun night" cx="1270" cy="230" r="56" mask="url(#cres)"/>
   <g class="night">${stars}</g>
   <g class="day" opacity=".85"><g class="drift">${big}</g><g class="drift2">${small}</g></g>
-  <g class="balloon"><g transform="translate(1720 70)"><g class="dangle">
-    <ellipse cx="0" cy="0" rx="26" ry="32" fill="#e8657a"/><ellipse cx="-9" cy="-11" rx="6" ry="9" fill="#f5a3b0"/>
-    <path d="M-4 31h8l-4 6z" fill="#c94f63"/><path d="M0 37v46" stroke="#4b4352" stroke-width="1.5" fill="none"/>
-    ${sprite(PLAIN, -21, 83, 3, COATS.orange)}
-  </g></g></g>
   <path class="far" d="M0 690C180 610 360 600 540 650S900 700 1080 630S1420 560 1600 620V1000H0z"/>
   <path class="mid" d="M0 780C220 720 420 730 640 770S1060 820 1260 760S1500 720 1600 740V1000H0z"/>
   <path class="near" d="M0 870C260 830 520 840 800 870S1300 900 1600 850V1000H0z"/>
