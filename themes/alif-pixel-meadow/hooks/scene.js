@@ -1,4 +1,5 @@
-// A soft meadow behind the chat, with a little pixel-art Claude critter and its laptop in the bottom-right corner.
+// A soft meadow behind the chat, crowded with goofy pixel critters: one at a laptop, a wobbling tower flying a kite,
+// cheering crowds, cloud riders, balloon riders, a gopher, a critter on the sun (fishing from the moon at night).
 // One SVG serves both modes: colours are classes, and a prefers-color-scheme rule swaps them for the night palette.
 // The ground fills any window (slice); the critter sits in its own nested svg pinned to the bottom-right (meet),
 // so it stays in view on any window shape, clear of the words in the middle.
@@ -66,7 +67,22 @@ const COATS = {
   mint: { O: '#8fcfb0', S: '#68ac8c', H: '#b2e3c9' },
   peach: { O: '#f2b38f', S: '#d58f69', H: '#f9cdb0' },
   orange: { O: '#d97757', S: '#b65d40', H: '#ea9572' },
+  pink: { O: '#f2a2b8', S: '#d27f97', H: '#f8c3d2' },
+  sky: { O: '#8ec5ec', S: '#6aa5cf', H: '#b3dbf5' },
+  butter: { O: '#f2d27a', S: '#d4b255', H: '#f8e3a6' },
 }
+const WAVE = [ // arms up, mouth open
+  'O............O',
+  'O.HHHHHHHHHO.S',
+  'OOHOOOOOOOOSSS',
+  '..OOEOOOOEOS..',
+  '..OOEOOOOEOS..',
+  '..OPOOEEOOPS..',
+  '..OOOOOOOOOS..',
+  '..SSSSSSSSSS..',
+  '..O.O....O.O..',
+  '..S.S....S.S..',
+]
 const DERP = [ // googly eyes and a tongue out
   '..HHHHHHHHHO..',
   '..HOOOOOOOOS..',
@@ -131,11 +147,16 @@ const ZED = ['ZZZZZ', '...Z.', '..Z..', '.Z...', 'ZZZZZ']
 
 function sprite(rows, ox, oy, size, coat = {}) {
   const map = { ...INK, ...coat }, byFill = {}
-  rows.forEach((row, y) => [...row].forEach((ch, x) => {
-    const f = map[ch]
-    if (!f) return
-    ;(byFill[f] ||= []).push(`M${ox + x * size} ${oy + y * size}h${size}v${size}h-${size}z`)
-  }))
+  // runs of one colour in a row become one rectangle, so a crowd stays small
+  rows.forEach((row, y) => {
+    for (let x = 0; x < row.length;) {
+      const f = map[row[x]]
+      let n = 1
+      while (x + n < row.length && row[x + n] === row[x]) n++
+      if (f) (byFill[f] ||= []).push(`M${ox + x * size} ${oy + y * size}h${n * size}v${size}h-${n * size}z`)
+      x += n
+    }
+  })
   return Object.entries(byFill).map(([f, d]) => `<path fill="${f}" d="${d.join('')}"/>`).join('')
 }
 
@@ -173,6 +194,12 @@ ${rules(DAY)}
 .float{animation:float 8s ease-in-out infinite}
 .dangle{transform-box:fill-box;transform-origin:top center;animation:sway 5s ease-in-out infinite}
 .kick{animation:kick 1.2s ease-in-out infinite}
+.cheer{animation:cheer 1.6s ease-in-out infinite}
+.peek2{animation:peek2 5s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes cheer{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-12px)}}
+@keyframes peek2{0%,40%,100%{transform:translateY(6px)}55%,85%{transform:translateY(0)}}
+@keyframes bobber{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 @keyframes hop{0%,30%,100%{transform:translateY(0)}55%{transform:translateY(-26px)}}
 @keyframes squish{0%,100%{transform:scale(1,1)}20%{transform:scale(1.12,.85)}35%{transform:scale(.92,1.1)}70%{transform:scale(1,1)}78%{transform:scale(1.1,.88)}}
 @keyframes wobble{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
@@ -192,8 +219,44 @@ ${rules(DAY)}
 `
 }
 
-function cloud(x, y, s) {
-  return `<g transform="translate(${x} ${y}) scale(${s})"><path class="cloud" d="M0 40a30 30 0 0 1 30-30a42 42 0 0 1 78-6a32 32 0 0 1 52 22a22 22 0 0 1 4 44H8a20 20 0 0 1-8-30z"/></g>`
+function cloud(x, y, s, rider) {
+  const r = rider ? `<g class="cheer" style="animation-delay:${((x % 7) / 5).toFixed(2)}s">${sprite(rider.pose, 50, -12 - rider.pose.length * 3, 3, COATS[rider.coat])}</g>` : ''
+  return `<g transform="translate(${x} ${y}) scale(${s})">${r}<path class="cloud" d="M0 40a30 30 0 0 1 30-30a42 42 0 0 1 78-6a32 32 0 0 1 52 22a22 22 0 0 1 4 44H8a20 20 0 0 1-8-30z"/></g>`
+}
+
+function balloon(x, y, color, light, coat, delay) {
+  return `<g class="float" style="animation-delay:${delay}s"><g transform="translate(${x} ${y})"><g class="dangle" style="animation-delay:${delay}s">
+    <ellipse cx="0" cy="0" rx="26" ry="32" fill="${color}"/><ellipse cx="-9" cy="-11" rx="6" ry="9" fill="${light}"/>
+    <path d="M-4 31h8l-4 6z" fill="${color}"/><path d="M0 37v46" stroke="#4b4352" stroke-width="1.5" fill="none"/>
+    ${sprite(PLAIN, -21, 83, 3, COATS[coat])}
+  </g></g></g>`
+}
+
+// a row of small critters cheering out of step
+function crowd(x0, feet, coats) {
+  return coats.map((c, i) => {
+    const pose = i % 2 ? PLAIN : WAVE
+    return `<g class="cheer" style="animation-delay:${(i * 0.27).toFixed(2)}s">${sprite(pose, x0 + i * 44, feet - pose.length * 3, 3, COATS[c])}</g>`
+  }).join('')
+}
+
+// critters standing on each other's heads, each one wobbling on the one below; the top one flies a kite with a face
+function tower(x, feet, levels) {
+  let y = feet
+  const parts = levels.map(([pose, coat]) => { const top = y - pose.length * 6, p = { pose, coat, top, feet: y }; y = top; return p })
+  const t = parts[parts.length - 1].top
+  let inner = `<path d="M${x + 81} ${t + 3}L${x + 150} ${t - 130}" stroke="#4b4352" stroke-width="1.2" fill="none"/>
+    <g class="sway" style="animation-duration:4s"><g transform="translate(${x + 150} ${t - 206})">
+      <path d="M0 0l30 38l-30 38l-30-38z" fill="#f2d27a"/><path d="M0 0v76M-30 38h60" stroke="#e8657a" stroke-width="2"/>
+      <rect x="-14" y="24" width="6" height="10" fill="#2b1d18"/><rect x="8" y="24" width="6" height="10" fill="#2b1d18"/>
+      <path d="M0 76c-10 12 10 18 0 30c-10 12 10 18 0 30" stroke="#e8657a" stroke-width="2" fill="none"/>
+    </g></g>`
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i], body = sprite(p.pose, x, p.top, 6, COATS[p.coat])
+    inner = i === 0 ? body + inner
+      : `<g style="transform-origin:${x + 42}px ${p.feet}px;animation:wob ${(2.6 + i * 0.35).toFixed(2)}s ease-in-out infinite;animation-delay:${(-i * 0.6).toFixed(1)}s">${body}${inner}</g>`
+  }
+  return inner
 }
 
 export function buildScene() {
@@ -201,8 +264,8 @@ export function buildScene() {
   // clouds, twice across so the drift loops without a seam
   let big = '', small = ''
   for (const off of [0, 1600]) {
-    big += cloud(140 + off, 120, 1.1) + cloud(1050 + off, 90, 0.9)
-    small += cloud(620 + off, 210, 0.7) + cloud(1400 + off, 290, 0.55)
+    big += cloud(140 + off, 120, 1.1, { pose: WAVE, coat: 'pink' }) + cloud(1050 + off, 90, 0.9, { pose: PLAIN, coat: 'sky' })
+    small += cloud(620 + off, 210, 0.7, { pose: DERP, coat: 'butter' }) + cloud(1400 + off, 290, 0.55, { pose: WAVE, coat: 'mint' })
   }
   let stars = ''
   for (let i = 0; i < 70; i++) {
@@ -223,8 +286,7 @@ export function buildScene() {
 <svg x="0" y="0" width="100%" height="100%" viewBox="0 0 1000 625" preserveAspectRatio="xMinYMax meet" overflow="visible">
   <path class="front" d="M-60 625V548C150 530 380 535 560 625z"/>
   ${leftTufts}
-  <g>${sprite(PLAIN, 196, 486, 6, COATS.peach)}</g>
-  <g class="wobble"><g class="kick">${sprite(SHADES, 196, 432, 6, COATS.lilac)}</g></g>
+  ${tower(196, 540, [[PLAIN, 'peach'], [SHADES, 'lilac'], [PLAIN, 'pink'], [SLEEPY, 'sky'], [WAVE, 'butter']])}
   <g class="day"><g class="hop"><g class="squish">
     ${sprite(DERP, 312, 498, 6, COATS.mint)}
     <g transform="rotate(-18 348 492)">${sprite(HAT, 312, 462, 6)}</g>
@@ -234,6 +296,7 @@ export function buildScene() {
     <g transform="rotate(-18 348 492)">${sprite(HAT, 312, 462, 6)}</g>
     ${zeds}
   </g>
+  ${crowd(178, 614, ['orange', 'sky', 'pink', 'butter', 'lilac'])}
   <g class="day"><g class="flutter"><g transform="translate(296 408)">
     <g class="flap"><path fill="#f6a5c0" d="M0 0c-14-12-22 4-10 10c-12 6-4 18 10 6z"/><path fill="#f6a5c0" d="M0 0c14-12 22 4 10 10c12 6 4 18-10 6z"/><rect x="-1" y="-4" width="2" height="16" fill="#4b4352"/></g>
   </g></g></g>
@@ -242,14 +305,13 @@ export function buildScene() {
   const corner = `
 <svg x="0" y="0" width="100%" height="100%" viewBox="0 0 1000 625" preserveAspectRatio="xMaxYMax meet" overflow="visible">
   <defs><radialGradient id="lamp"><stop class="glow" offset="0" stop-opacity=".35"/><stop class="glow" offset="1" stop-opacity="0"/></radialGradient></defs>
-  <g class="float"><g transform="translate(806 236)"><g class="dangle">
-    <ellipse cx="0" cy="0" rx="26" ry="32" fill="#e8657a"/><ellipse cx="-9" cy="-11" rx="6" ry="9" fill="#f5a3b0"/>
-    <path d="M-4 31h8l-4 6z" fill="#c94f63"/><path d="M0 37v46" stroke="#4b4352" stroke-width="1.5" fill="none"/>
-    ${sprite(PLAIN, -21, 83, 3, COATS.orange)}
-  </g></g></g>
+  ${balloon(806, 236, '#e8657a', '#f5a3b0', 'orange', 0)}
+  ${balloon(905, 120, '#f2c94c', '#f8e3a6', 'sky', -3)}
+  ${balloon(958, 318, '#7fb6e8', '#b9d9f5', 'pink', -5.5)}
   <g class="peek">${sprite(PEEKER, 728, 578, 4, COATS.orange)}</g>
   <path class="front" d="M560 625C620 575 730 545 860 543S990 548 1040 556V625z"/>
   ${tufts}
+  <g class="peek2">${sprite(PEEKER, 806, 478, 3, COATS.pink)}</g>
   <g transform="translate(796 502)">
     <g class="night"><circle cx="30" cy="18" r="46" fill="url(#lamp)"/></g>
     ${pixels(LAPTOP, 0, 0, 5)}
@@ -259,7 +321,9 @@ export function buildScene() {
   <g class="bob">
     ${pixels(CRITTER, cx, cy, P, 'OSHP')}
     <g class="blink">${pixels(CRITTER, cx, cy, P, 'E')}</g>
+    ${sprite(PLAIN, 901, 461, 3, COATS.sky)}
   </g>
+  ${crowd(760, 616, ['lilac', 'butter', 'mint', 'pink', 'peach'])}
   <g class="night">
     <circle class="dot fly" cx="842" cy="470" r="2.2"/>
     <circle class="dot fly fly1" cx="975" cy="462" r="1.8"/>
@@ -283,6 +347,10 @@ export function buildScene() {
   <circle class="sun day" cx="1270" cy="230" r="56"/>
   <circle class="sun night" cx="1270" cy="230" r="56" mask="url(#cres)"/>
   <g class="night">${stars}</g>
+  <g class="day"><g class="kick">${sprite(PLAIN, 1242, 140, 4, COATS.mint)}</g></g>
+  <g class="night">${sprite(SLEEPY, 1268, 222, 4, COATS.mint)}
+    <path d="M1322 238L1372 206" stroke="#c7a27a" stroke-width="2.5"/><path d="M1372 206V318" stroke="#f6ead3" stroke-width="1" opacity=".7"/>
+    <g style="animation:bobber 3s ease-in-out infinite"><path d="M1372 316l4 6l-4 6l-4-6z" fill="#ffd98a"/></g></g>
   <g class="day" opacity=".85"><g class="drift">${big}</g><g class="drift2">${small}</g></g>
   <path class="far" d="M0 690C180 610 360 600 540 650S900 700 1080 630S1420 560 1600 620V1000H0z"/>
   <path class="mid" d="M0 780C220 720 420 730 640 770S1060 820 1260 760S1500 720 1600 740V1000H0z"/>

@@ -10,7 +10,7 @@ My Claude themes, all in one place. Each theme is its own plugin in `themes/`, a
 | **alif-beach** | A beach. Warm sand paper and deep sea-teal ink by day, a moonlit shoreline by night, with a faint sun, drifting waves, a small boat and a palm at the right edge behind the chat. |
 | **alif-kl-day** | Pixel-art Kuala Lumpur by day: a bright blue sky, pixel clouds and sun, a dense skyline (Menara KL, Petronas Twin Towers with their skybridge, Merdeka Maybank, The Exchange 106) and a grass strip along the bottom. Light mode only. |
 | **alif-kl-night** | The same skyline at night: stars, a crescent moon and twinkling lit windows. Dark mode only. |
-| **alif-pixel-meadow** | A soft meadow full of goofy pixel critters: one typing at a glowing laptop, a gopher that peeks out of the hill, a cool lilac critter in sunglasses wobbling on a friend’s head, a mint derp in a party hat with its tongue out (it falls asleep at night), and a tiny one floating by on a balloon. Peach morning and drifting clouds by day, plum starry night, moon and fireflies by dark. Light and dark. |
+| **alif-pixel-meadow** | A soft meadow packed with a bajillion goofy pixel critters: a five-high critter tower wobbling while the top one flies a kite with a face, a mint derp in a party hat (asleep at night), cheering crowds on both hills, critters riding the clouds and three balloons, one sitting on the sun (fishing off the moon at night), a gopher, a baby riding on the main critter’s head, one peeking over the laptop, and the original typing away. Peach morning by day, plum starry night by dark. Light and dark. |
 
 ![alif-pixel-meadow by day](previews/pixel-meadow-day.png)
 ![alif-pixel-meadow by night](previews/pixel-meadow-night.png)
